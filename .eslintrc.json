@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  {
+    "parserOptions": {
+      "ecmaVersion": 2022
+    },
+  },
+  "extends": [
+    "@nuxtjs",
+    "plugin:nuxt/recommended"
+  ],
+  "plugins": [
+    "simple-import-sort"
+  ],
+  "ignorePatterns": [
+    "*.html"
+  ],
+  "rules": {
+    "vue/multi-word-component-names": 0,
+    "no-unused-vars": 1,
+    "comma-dangle": [
+      1,
+      "always-multiline"
+    ],
+    "import/no-named-as-default": 0,
+    "vue/no-setup-props-destructure": 1
+  }
+}

@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+html {
+	--container-max-width: 1600px;
+	--container-padding-inline: 1rem;
+	
+	@media (min-width: 1024px) {
+		--container-padding-inline: 2rem;
+	}
+}
+
+@utility container {
+  max-width: var(--container-max-width);
+  width: 100%;
+	padding-inline: var(--container-padding-inline);
+	margin-inline: auto;
+}
+*,
+*::after,
+*::before {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-smoothing: antialiased;
+	backface-visibility: hidden;
+	font-kerning: normal;
+	text-wrap: pretty;
+	font-synthesis: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-wrap: balance;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+p {
+	margin-bottom: 1em;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&:empty {
+		display: none;
+	}
+}
+
+*:not(input):not(textarea):not(select) {
+	text-box: trim-both cap alphabetic;
+}
