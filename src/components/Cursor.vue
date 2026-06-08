@@ -1,7 +1,6 @@
 <template>
-  <div ref="elCursor" class="absolute top-0 left-0 flex gap-1 items-center pointer-events-none"
-    :style="{ color, opacity: isActive ? 1 : 0.5 }">
-    <svg viewBox="11 10 8 15" class="h-[17px] pointer-events-none overflow-visible">
+  <div ref="elCursor" class="cursor-wrapper" :style="{ color, opacity: isActive ? 1 : 0.5 }" aria-hidden="true">
+    <svg viewBox="11 10 8 15" :class="['cursor', isActive ? '' : 'active']">
       <defs>
         <g id="cursor">
           <path fill="#fff" d="m16.1 25.5 2-1 1.5-.9-2.5-4.8h4.3L10 7.4v16l3.3-3.2z" />
@@ -14,7 +13,7 @@
       <use href="#cursor" />
     </svg>
 
-    <span class="text-shadow-md text-shadow-white text-[10px] whitespace-nowrap">{{ name }}</span>
+    <span class="name">{{ name }}</span>
 
     <div v-if="!isActive" class="sleep">
       <span>z</span>
@@ -101,7 +100,6 @@ export default {
 
         explodeTl
           .fromTo(clone, { x: 0, y: 0, opacity: 1, rotate: 0 }, { x, y, rotate, opacity: 0, ease, duration }, 0)
-
       })
     }
 
@@ -120,7 +118,6 @@ export default {
       watch(() => props.explode, (explode) => {
         if (explode) triggerExplode()
       })
-
     })
 
     return { elCursor, clonesCount, elsClones }
@@ -129,21 +126,31 @@ export default {
 </script>
 
 <style>
+.cursor-wrapper {
+  font-family: monospace;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  pointer-events: none;
+  z-index: 999999999;
+}
+
 .sleep {
   position: absolute;
   bottom: 100%;
   display: grid;
   font-size: 8px;
-  line-height: 0;
+  line-height: 0.6;
+  margin-bottom: -1.5em;
   bottom: 100%;
-  margin-bottom: -0.5em;
-  right: -2em;
-  /* transition: opacity 20s; */
+  left: -1.25em;
 
   @starting-style {
     opacity: 0;
   }
-
 
   span {
     display: block;
@@ -152,26 +159,28 @@ export default {
     animation: sleep 2.5s ease-in-out infinite;
 
     &:nth-child(1) {
-      margin-left: 1.5em;
-      animation-delay: 10.8s;
+      margin-left: -1.5em;
+      animation-delay: 12.8s;
     }
 
     &:nth-child(2) {
-      margin-left: 0.5em;
-      animation-delay: 5.6s;
+      margin-left: -0.5em;
+      animation-delay: 7.6s;
     }
 
     &:nth-child(3) {
-      margin-left: 1em;
-      animation-delay: 2.9s;
+      margin-left: -1em;
+      animation-delay: 4.9s;
     }
 
     &:nth-child(4) {
-      margin-left: 0.5em;
-      animation-delay: .2s;
+      margin-left: -0.5em;
+      animation-delay: 2.2s;
     }
 
-    &:nth-child(5) {}
+    &:nth-child(5) {
+      animation-delay: 2.2s;
+    }
   }
 }
 
@@ -185,7 +194,26 @@ export default {
 
   50% {
     opacity: 1;
-    transform: translate(2px, -1px);
+    transform: translate(-2px, -1px);
   }
+}
+
+.cursor {
+  height: 17px;
+  pointer-events: none;
+  overflow: visible;
+  transform-origin: 40% 60%;
+
+  &.active {
+    transform: rotate(-90deg);
+    transition: transform 2.3s;
+    transition-timing-function: cubic-bezier(0.36, 0, 0.64, 1);
+  }
+}
+
+.name {
+  font-size: 10px;
+  text-shadow: 0.5px 0.5px white, -0.5px 0.5px white, -0.5px -0.5px white, 0.5px -0.5px white;
+  white-space: nowrap;
 }
 </style>

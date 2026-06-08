@@ -1,9 +1,3 @@
-<template>
-  <div>
-
-  </div>
-</template>
-
 <script>
 import { useMultiplayerStore } from '@/stores/multiplayer'
 import { onMounted, onUnmounted } from 'vue';

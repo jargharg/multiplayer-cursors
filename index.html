@@ -1,13 +1,236 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vite App</title>
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    html {
+      --container-max-width: 1600px;
+      --container-padding-inline: 1rem;
+
+      @media (min-width: 1024px) {
+        --container-padding-inline: 2rem;
+      }
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.5;
+    }
+
+    *,
+    *::after,
+    *::before {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-smoothing: antialiased;
+      backface-visibility: hidden;
+      font-kerning: normal;
+      text-wrap: pretty;
+      font-synthesis: none !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      text-wrap: balance;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    p {
+      margin-bottom: 1em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:empty {
+        display: none;
+      }
+    }
+
+    *:not(input):not(textarea):not(select) {
+      text-box: trim-both cap alphabetic;
+    }
+
+
+    .container {
+      max-width: var(--container-max-width);
+      width: 100%;
+      padding-inline: var(--container-padding-inline);
+      margin-inline: auto;
+    }
+
+    .header {
+      padding-block: 1.25rem;
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .main {
+      display: grid;
+      gap: 1.25rem;
+      padding-block: 3rem;
+      max-width: 600px;
+      margin-inline: auto;
+
+      @media (min-width: 768px) {
+        padding-block: 5rem;
+      }
+    }
+
+    .footer {
+      background-color: black;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 10px;
+      text-align: center;
+      padding-block: 5rem;
+    }
+
+    .heading {
+      font-size: 40px;
+      font-weight: bold;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .subheading {
+      font-size: 32px;
+      font-weight: bold;
+      line-height: 1;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {}
+  </style>
+</head>
+
+<body>
+  <script type="module" src="/src/main.js"></script>
+
+  <header class="header">
+    <div class="container">
+      Multiplayer Cursors
+    </div>
+  </header>
+
+  <div class="container main">
+    <h1 class="heading">Lorem ipsum, dolor sit amet.</h1>
+
+    <p>
+      In hac habitasse platea dictumst. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac
+      turpis egestas. Nam eu nunc non augue tincidunt suscipit. Suspendisse potenti. Aliquam erat volutpat. Integer vel
+      turpis sed purus scelerisque euismod.
+    </p>
+
+    <p>
+      Etiam accumsan urna a mauris dapibus, nec aliquet nunc convallis. Phasellus eget justo et libero ultrices
+      posuere. Cras euismod, arcu nec congue convallis, ipsum nunc cursus nibh, vel condimentum sapien orci non libero.
+      Integer ullamcorper felis sit amet felis placerat, eu convallis lorem iaculis.
+    </p>
+
+    <h2 class="subheading">Subheading</h2>
+
+    <p>
+      Praesent placerat, magna in vehicula vestibulum, felis urna cursus lorem, sed vestibulum quam eros vel libero.
+      Vivamus commodo, odio sed fringilla pretium, sem nulla feugiat odio, in cursus elit dolor et ex.
+    </p>
+
+    <p>
+      Fusce at nisi arcu. Quisque sed dolor nec dui scelerisque dapibus. Sed at purus at sem aliquet luctus. Sed non
+      massa sit amet sapien porttitor ornare. Vivamus pretium, tortor at tempus ullamcorper, diam ligula lobortis quam,
+      at scelerisque libero lectus ut risus.
+    </p>
+
+    <p>
+      Nullam vehicula magna sit amet magna ullamcorper, at dictum est gravida. Morbi nec magna at quam malesuada
+      accumsan. Suspendisse potenti. Vivamus feugiat massa ut tortor scelerisque, non dapibus nulla consectetur. Aliquam
+      erat volutpat.
+    </p>
+
+    <h2 class="subheading">Subheading</h2>
+
+    <p>
+      Praesent placerat, magna in vehicula vestibulum, felis urna cursus lorem, sed vestibulum quam eros vel libero.
+      Vivamus commodo, odio sed fringilla pretium, sem nulla feugiat odio, in cursus elit dolor et ex.
+    </p>
+
+    <p>
+      Fusce at nisi arcu. Quisque sed dolor nec dui scelerisque dapibus. Sed at purus at sem aliquet luctus. Sed non
+      massa sit amet sapien porttitor ornare. Vivamus pretium, tortor at tempus ullamcorper, diam ligula lobortis quam,
+      at scelerisque libero lectus ut risus.
+    </p>
+
+    <p>
+      Nullam vehicula magna sit amet magna ullamcorper, at dictum est gravida. Morbi nec magna at quam malesuada
+      accumsan. Suspendisse potenti. Vivamus feugiat massa ut tortor scelerisque, non dapibus nulla consectetur. Aliquam
+      erat volutpat.
+    </p>
+
+    <h2 class="subheading">Subheading</h2>
+
+    <p>
+      Praesent placerat, magna in vehicula vestibulum, felis urna cursus lorem, sed vestibulum quam eros vel libero.
+      Vivamus commodo, odio sed fringilla pretium, sem nulla feugiat odio, in cursus elit dolor et ex.
+    </p>
+
+    <p>
+      Fusce at nisi arcu. Quisque sed dolor nec dui scelerisque dapibus. Sed at purus at sem aliquet luctus. Sed non
+      massa sit amet sapien porttitor ornare. Vivamus pretium, tortor at tempus ullamcorper, diam ligula lobortis quam,
+      at scelerisque libero lectus ut risus.
+    </p>
+
+    <p>
+      Nullam vehicula magna sit amet magna ullamcorper, at dictum est gravida. Morbi nec magna at quam malesuada
+      accumsan. Suspendisse potenti. Vivamus feugiat massa ut tortor scelerisque, non dapibus nulla consectetur. Aliquam
+      erat volutpat.
+    </p>
+
+    <h2 class="subheading">Subheading</h2>
+
+    <p>
+      Praesent placerat, magna in vehicula vestibulum, felis urna cursus lorem, sed vestibulum quam eros vel libero.
+      Vivamus commodo, odio sed fringilla pretium, sem nulla feugiat odio, in cursus elit dolor et ex.
+    </p>
+
+    <p>
+      Fusce at nisi arcu. Quisque sed dolor nec dui scelerisque dapibus. Sed at purus at sem aliquet luctus. Sed non
+      massa sit amet sapien porttitor ornare. Vivamus pretium, tortor at tempus ullamcorper, diam ligula lobortis quam,
+      at scelerisque libero lectus ut risus.
+    </p>
+
+    <p>
+      Nullam vehicula magna sit amet magna ullamcorper, at dictum est gravida. Morbi nec magna at quam malesuada
+      accumsan. Suspendisse potenti. Vivamus feugiat massa ut tortor scelerisque, non dapibus nulla consectetur. Aliquam
+      erat volutpat.
+    </p>
+  </div>
+
+  <footer class="footer">
+    <p class="container">
+      &copy; 2026 Bogus Enterprises
+    </p>
+  </footer>
+
+</body>
+
 </html>

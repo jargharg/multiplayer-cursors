@@ -1,9 +1,7 @@
 <template>
-  <ul role="presentation">
-    <li v-for="cursor in multiplayerStore.cursors" :key="cursor.id">
-      <Cursor v-bind="cursor" />
-    </li>
-  </ul>
+  <div role="presentation">
+    <Cursor v-bind="cursor" v-for="cursor in multiplayerStore.cursors" :key="cursor.id" />
+  </div>
 
   <LocalCursor />
 </template>

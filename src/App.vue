@@ -1,25 +1,18 @@
 <template>
-  <main @mousemove="onMouseMove" @mouseleave="onMouseLeave" @mouseenter="onMouseEnter" @dblclick="onClick">
-    <DemoContent />
-  </main>
-
   <Cursors />
-  <!-- <SelectionOutlines /> -->
 </template>
 
 <script>
 import Cursors from './components/Cursors.vue'
-import DemoContent from './components/DemoContent.vue'
-// import SelectionOutlines from './components/SelectionOutlines.vue'
 import { useMultiplayerStore } from './stores/multiplayer'
 
 export default {
   components: {
     Cursors,
-    DemoContent,
-    // SelectionOutlines
   },
+
   setup() {
+    console.log('setting up App.vue')
     const multiplayerStore = useMultiplayerStore()
 
     const onMouseEnter = () => {
@@ -29,17 +22,6 @@ export default {
     const onMouseLeave = () => {
       multiplayerStore.setActiveStatus(false)
     }
-    
-    const onWindowBlur = () => {
-      multiplayerStore.setActiveStatus(false)
-    }
-    
-    const onWindowFocus = () => {
-      multiplayerStore.setActiveStatus(true)
-    }
-    
-    window.addEventListener('blur', onWindowBlur)
-    window.addEventListener('focus', onWindowFocus)
 
     const onMouseMove = (event) => {
       const x = event.pageX / document.documentElement.scrollWidth
@@ -47,17 +29,31 @@ export default {
       multiplayerStore.updateLocalCursorPosition(x, y)
     }
 
+    const onWindowBlur = () => {
+      multiplayerStore.setActiveStatus(false)
+    }
+
+    const onWindowFocus = () => {
+      multiplayerStore.setActiveStatus(true)
+    }
+
     const onClick = () => {
       multiplayerStore.triggerLocalCursorExplode()
     }
-
-    return {
-      multiplayerStore,
-      onClick,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseMove,
+    
+    const onKeyDown = (event) => {
+      if (event.key === '/') {
+        // open chat window
+      }
     }
+
+    window.addEventListener('blur', onWindowBlur)
+    window.addEventListener('focus', onWindowFocus)
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseleave', onMouseLeave)
+    document.addEventListener('mouseenter', onMouseEnter)
+    document.addEventListener('dblclick', onClick)
+    document.addEventListener('keydown', onKeyDown)
   },
 }
 
