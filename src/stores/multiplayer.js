@@ -27,6 +27,7 @@ const createCursor = (id, userData) => {
     y: userData.y,
     lastActive: userData.lastActive,
     isActive: userData.isActive ?? false,
+    chatMessage: userData.chatMessage ?? null,
   }
 }
 
@@ -66,35 +67,43 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
 
   const initLocalCursorFromSession = () => {
     const storedUserId = sessionStorage.getItem('multiplayerUserId')
-
-    if (!storedUserId) {
-      console.log('no stored user ID found in session')
-      return false
+    const promptName = () => {
+      const name = prompt('Enter your name:', 'Guest') || 'Guest'
+      createLocalCursor(name)
     }
 
-    localUserId.value = storedUserId
+    if (!storedUserId) {
+      promptName()
+      return Promise.resolve(true)
+    } else {
+      return new Promise((resolve) => {
+        onValue(fbRef(db, `users/${storedUserId}`), (snapshot) => {
+          const userData = snapshot.val()
 
-    onValue(fbRef(db, `users/${localUserId.value}`), (snapshot) => {
-      const userData = snapshot.val()
-
-      if (userData) {
-        localCursor.value = createCursor(localUserId.value, userData)
-      }
-    })
-
-    return true
+          if (userData) {
+            localUserId.value = storedUserId
+            localCursor.value = createCursor(localUserId.value, userData)
+            resolve(true)
+          } else {
+            promptName()
+            resolve(true)
+          }
+        })
+      })
+    }
   }
 
   const createLocalCursor = (name) => {
-    localUserId.value = sessionStorage.getItem('multiplayerUserId')
-    const color = `hsl(${Math.random() * 360}, 100%, 30%)`
+    console.log({ db, localUserId: localUserId.value, localCursor: localCursor.value })
+    const color = `hsl(${Math.random() * 360}, 100%, 20%)`
 
-    if (!localUserId.value) {
-      localUserId.value = name.toLowerCase().replace(/\s/g, '-') + '-' + Date.now()
-      sessionStorage.setItem('multiplayerUserId', localUserId.value)
+    localUserId.value = name.toLowerCase().replace(/\s/g, '-') + '-' + Date.now()
+    sessionStorage.setItem('multiplayerUserId', localUserId.value)
+
+    if (!db) {
+      return
     }
 
-    checkInitialised()
 
     localCursor.value = {
       name,
@@ -102,23 +111,32 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
       x: null,
       y: null,
       cursorCount: 4,
+      chatMessage: null,
       explode: false,
       lastActive: Date.now(),
       isActive: true,
     }
 
+    console.log('Created local cursor:', localCursor.value)
+
     updateLocalCursorInDb()
   }
 
   const removeLocalCursor = () => {
-    checkInitialised()
+    if (!db || !localUserId.value || !localCursor.value) {
+      return
+    }
 
-    set(fbRef(db, `users/${localUserId.value}`), null)
+
+    // set(fbRef(db, `users/${localUserId.value}`), null)
     localUserId.value = null
   }
 
   const setActiveStatus = (isActive = true) => {
-    checkInitialised()
+    if (!db || !localUserId.value || !localCursor.value) {
+      return
+    }
+
 
     localCursor.value.isActive = isActive ?? true
 
@@ -126,7 +144,10 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
   }
 
   const updateLocalCursorPosition = (x, y) => {
-    checkInitialised()
+    if (!db || !localUserId.value || !localCursor.value) {
+      return
+    }
+
 
     localCursor.value.x = x
     localCursor.value.y = y
@@ -137,7 +158,10 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
   let resetCursorCountTimeout = null
 
   const triggerLocalCursorExplode = () => {
-    checkInitialised()
+    if (!db || !localUserId.value || !localCursor.value) {
+      return
+    }
+
 
     clearTimeout(resetCursorCountTimeout)
 
@@ -157,16 +181,14 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
     }, 100)
   }
 
-  const checkInitialised = () => {
-    if (!db) {
-      console.error('Database not initialized')
+  const setChatMessage = (message) => {
+    if (!db || !localUserId.value || !localCursor.value) {
       return
     }
 
-    if (!localUserId.value) {
-      console.error('Local user ID not set')
-      return
-    }
+    localCursor.value.chatMessage = message
+
+    updateLocalCursorInDb()
   }
 
   return {
@@ -174,10 +196,12 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
     createLocalCursor,
     cursors,
     initLocalCursorFromSession,
+    localCursor,
     localUserId,
     removeLocalCursor,
     setActiveStatus,
     triggerLocalCursorExplode,
     updateLocalCursorPosition,
+    setChatMessage,
   }
 })

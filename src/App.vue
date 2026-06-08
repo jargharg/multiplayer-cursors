@@ -12,7 +12,6 @@ export default {
   },
 
   setup() {
-    console.log('setting up App.vue')
     const multiplayerStore = useMultiplayerStore()
 
     const onMouseEnter = () => {
@@ -40,12 +39,6 @@ export default {
     const onClick = () => {
       multiplayerStore.triggerLocalCursorExplode()
     }
-    
-    const onKeyDown = (event) => {
-      if (event.key === '/') {
-        // open chat window
-      }
-    }
 
     window.addEventListener('blur', onWindowBlur)
     window.addEventListener('focus', onWindowFocus)
@@ -53,7 +46,6 @@ export default {
     document.addEventListener('mouseleave', onMouseLeave)
     document.addEventListener('mouseenter', onMouseEnter)
     document.addEventListener('dblclick', onClick)
-    document.addEventListener('keydown', onKeyDown)
   },
 }
 

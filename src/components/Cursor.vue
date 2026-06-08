@@ -1,5 +1,5 @@
 <template>
-  <div ref="elCursor" class="cursor-wrapper" :style="{ color, opacity: isActive ? 1 : 0.5 }" aria-hidden="true">
+  <div ref="elCursor" class="cursor-wrapper" :style="{ color }" aria-hidden="true">
     <svg viewBox="11 10 8 15" :class="['cursor', isActive ? '' : 'active']">
       <defs>
         <g id="cursor">
@@ -22,14 +22,21 @@
       <span>z</span>
       <span>z</span>
     </div>
+
+    <ChatBubble :chatMessage="chatMessage" :isActive="!!chatMessage" :color="color"
+      :style="{ left: '14px',  top: '20px' }" />
   </div>
 </template>
 
 <script>
 import gsap from 'gsap'
 import { nextTick, onMounted, ref, watch } from 'vue'
+import ChatBubble from './ChatBubble.vue';
 
 export default {
+  components: {
+    ChatBubble,
+  },
   props: {
     id: {
       type: String,
@@ -62,6 +69,10 @@ export default {
     isActive: {
       type: Boolean,
       default: false,
+    },
+    chatMessage: {
+      type: String,
+      default: '',
     },
   },
 
@@ -132,7 +143,7 @@ export default {
   top: 0;
   left: 0;
   display: flex;
-  gap: 1px;
+  gap: 4px;
   align-items: center;
   pointer-events: none;
   z-index: 999999999;
