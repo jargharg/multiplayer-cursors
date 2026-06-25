@@ -2,7 +2,7 @@
   <div ref="elChatBox" :class="['chat-bubble', chatMessage || isActive ? 'active' : '']"
     :style="{ backgroundColor: color, ...style }" role="presentation" aria-hidden="true">
     <svg viewBox="0 0 10 10" :fill="color">
-      <path d="M0,0 L 10 3 V10 H3Z" />
+      <path d="M0,10 L 10 7 V0 H3Z" />
     </svg>
 
     {{ chatMessage }}
@@ -35,8 +35,8 @@ export default {
 <style scoped>
 .chat-bubble {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: -2.25rem;
+  left: 1.25rem;
   pointer-events: none;
   color: white;
   font-size: 12px;
@@ -58,7 +58,7 @@ export default {
   svg {
     z-index: -1;
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 12px;
     height: 12px;

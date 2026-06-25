@@ -1,19 +1,8 @@
 <template>
-  <div ref="elCursor" class="cursor-wrapper" :style="{ color }" aria-hidden="true">
-    <svg viewBox="11 10 8 15" :class="['cursor', isActive ? '' : 'active']">
-      <defs>
-        <g id="cursor">
-          <path fill="#fff" d="m16.1 25.5 2-1 1.5-.9-2.5-4.8h4.3L10 7.4v16l3.3-3.2z" />
-          <path fill="currentColor" d="m16.4 24 1.8-1-2.8-5.1H19l-8-8V21l2.5-2.4z" />
-        </g>
-      </defs>
-
-      <use ref="elsClones" href="#cursor" class="clone" v-for="i in clonesCount" :key="i" />
-
-      <use href="#cursor" />
-    </svg>
-
+  <div ref="elCursor" class="cursor" :style="{ color }" aria-hidden="true">
     <span class="name">{{ name }}</span>
+
+    <span class="name clone" v-for="i in clonesCount" :key="i" ref="elsClones" aria-hidden="true">{{ name }}</span>
 
     <div v-if="!isActive" class="sleep">
       <span>z</span>
@@ -24,7 +13,7 @@
     </div>
 
     <ChatBubble :chatMessage="chatMessage" :isActive="!!chatMessage" :color="color"
-      :style="{ left: '14px',  top: '20px' }" />
+      :style="{ left: '0.75rem', top: '-2.25rem' }" />
   </div>
 </template>
 
@@ -99,8 +88,8 @@ export default {
         const a = (index / elsClones.value.length) * 360
         const angleOffset = gsap.utils.random(-10, 10)
         const angle = a + angleOffset
-        const distance = gsap.utils.random(40, 60)
-        const rotate = gsap.utils.random(-10, 10)
+        const distance = gsap.utils.random(80, 140)
+        const rotate = gsap.utils.random(0, 360)
         const ease = 'circ.out'
         const duration = gsap.utils.random(1.5, 2.5)
 
@@ -137,27 +126,30 @@ export default {
 </script>
 
 <style>
-.cursor-wrapper {
+.cursor {
   font-family: monospace;
   position: absolute;
   top: 0;
   left: 0;
-  display: flex;
-  gap: 4px;
-  align-items: center;
+  height: 2rem;
+  width: 2rem;
+  display: grid;
   pointer-events: none;
   z-index: 999999999;
+
+  * {
+    grid-area: 1 / 1 / 2 / 2;
+  }
 }
 
 .sleep {
   position: absolute;
-  bottom: 100%;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   font-size: 8px;
   line-height: 0.6;
-  margin-bottom: -1.5em;
-  bottom: 100%;
-  left: -1.25em;
+  bottom: calc(100% + 0.5rem);
+  left: -1rem;
 
   @starting-style {
     opacity: 0;
@@ -170,22 +162,25 @@ export default {
     animation: sleep 2.5s ease-in-out infinite;
 
     &:nth-child(1) {
-      margin-left: -1.5em;
+      margin-left: -1.2em;
       animation-delay: 12.8s;
+      font-size: 14px;
     }
 
     &:nth-child(2) {
-      margin-left: -0.5em;
+      font-size: 12px;
+      margin-left: -0.65em;
       animation-delay: 7.6s;
     }
 
     &:nth-child(3) {
-      margin-left: -1em;
+      font-size: 10px;
+      margin-left: -1.3em;
       animation-delay: 4.9s;
     }
 
     &:nth-child(4) {
-      margin-left: -0.5em;
+      margin-left: -0.75em;
       animation-delay: 2.2s;
     }
 
@@ -209,22 +204,18 @@ export default {
   }
 }
 
-.cursor {
-  height: 17px;
-  pointer-events: none;
-  overflow: visible;
-  transform-origin: 40% 60%;
-
-  &.active {
-    transform: rotate(-90deg);
-    transition: transform 2.3s;
-    transition-timing-function: cubic-bezier(0.36, 0, 0.64, 1);
-  }
-}
-
 .name {
-  font-size: 10px;
+  font-size: 1.75rem;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
   text-shadow: 0.5px 0.5px white, -0.5px 0.5px white, -0.5px -0.5px white, 0.5px -0.5px white;
   white-space: nowrap;
+  margin-top: 0.25rem;
+  transform: translate(-50%, -50%);
+
+}
+
+.clone {
+  z-index: -1;
 }
 </style>

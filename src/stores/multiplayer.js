@@ -1,7 +1,10 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, set, ref as fbRef, onValue } from 'firebase/database'
+import gsap from 'gsap'
+
+const EMOJIS = ['😀', '😁', '😂', '😄', '😆', '😇', '😈', '😉', '😋', '😌', '😍', '😎', '😏', '😑', '😒', '😔', '😖', '😘', '😛', '😜', '😟', '😠', '😡', '😢', '😣', '😤', '😥', '😫', '😬', '😭', '😮', '😯', '😰', '😱', '😲', '😳', '😴', '😵', '😶', '🙂', '🙃', '🙄', '🤑', '🤓', '🤔', '🤗', '🤠', '🤤', '🤨', '🤩', '🤪', '🤫', '🤭', '🤮', '🤯', '🥰', '🥱', '🥳', '🥴', '🥺', '🧐', '😸', '😹', '😺', '😻', '😼', '💀', '✌', '🤘', '🤞', '👮', '👷', '🕵', '💃', '👶', '🎅', '👻', '👼', '👽', '🤖', '🤡', '🧚', '👀', '🐓', '🐙', '🐨', '🐴', '🐷', '🐸', '🐹', '🐼', '🕷', '🦀', '🦁', '🌞', '🌚', '😶‍🌫️']
 
 const initializeFirebase = () => {
   return initializeApp({
@@ -37,6 +40,7 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
   const db = getDatabase(app.value)
   const localCursor = ref(null)
   const localUserId = ref(null)
+  const isInitialized = ref(false)
   const usersRef = fbRef(db, 'users/')
 
   const updateLocalCursorInDb = () => {
@@ -63,17 +67,32 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
         cursors.value.push(createCursor(userId, userData))
       }
     }
+
+    isInitialized.value = true
   })
 
-  const initLocalCursorFromSession = () => {
+  const initLocalCursorFromSession = async () => {
+    return new Promise((resolve) => {
+      watch(() => isInitialized.value, async (newVal) => {
+        if (newVal) {
+          await initializeLocalCursor()
+          resolve(true)
+        }
+      }, { immediate: true })
+    })
+  }
+
+  const initializeLocalCursor = () => {
     const storedUserId = sessionStorage.getItem('multiplayerUserId')
-    const promptName = () => {
-      const name = prompt('Enter your name:', 'Guest') || 'Guest'
+
+    const createNewCursor = () => {
+      const unusedEmojis = EMOJIS.filter(emoji => !cursors.value.some(cursor => cursor.name === emoji))
+      const name = gsap.utils.shuffle(unusedEmojis).pop()
       createLocalCursor(name)
     }
 
     if (!storedUserId) {
-      promptName()
+      createNewCursor()
       return Promise.resolve(true)
     } else {
       return new Promise((resolve) => {
@@ -85,7 +104,7 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
             localCursor.value = createCursor(localUserId.value, userData)
             resolve(true)
           } else {
-            promptName()
+            createNewCursor()
             resolve(true)
           }
         })
@@ -104,7 +123,6 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
       return
     }
 
-
     localCursor.value = {
       name,
       color,
@@ -116,8 +134,6 @@ export const useMultiplayerStore = defineStore('multiplayer', () => {
       lastActive: Date.now(),
       isActive: true,
     }
-
-    console.log('Created local cursor:', localCursor.value)
 
     updateLocalCursorInDb()
   }
